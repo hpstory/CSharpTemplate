@@ -8,6 +8,8 @@
 - 数据结构
     - [字典树](https://github.com/hpstory/CSharpTemplate/blob/master/CSharpTemplate/DataStructures/Trie.cs)
     - [并查集](https://github.com/hpstory/CSharpTemplate/blob/master/CSharpTemplate/DataStructures/UnionSet.cs)
+- 动态规划
+    - [背包问题](https://github.com/hpstory/CSharpTemplate/blob/master/CSharpTemplate/DynamicProgramming/KnapsackProblem.cs)
 - 图论
     - [拓扑排序](https://github.com/hpstory/CSharpTemplate/blob/master/CSharpTemplate/Graph/TopologicalSorting.cs)
 - 搜索
