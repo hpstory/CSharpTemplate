@@ -65,15 +65,86 @@ namespace CSharpTemplate.DynamicProgramming
             return dp[n, capacity];
         }
 
+        // 多重背包二进制优化
+        public int MultipleKnapsackII(int[] weights, int[] values, int[] limits, int capacity)
+        {
+            int n = weights.Length;
+            int[] dp = new int[capacity + 1];
+            List<(int, int)> goods = new();
+            for (int i = 0; i < n; i++)
+            {
+                int s = limits[i];
+                for (int k = 1; k <= s; k *= 2)
+                {
+                    s -= k;
+                    goods.Add((k * weights[i], k * values[i]));
+                }
+
+                if (s > 0) goods.Add((s * weights[i], s * values[i]));
+            }
+
+            foreach (var good in goods)
+            {
+                for (int j = capacity; j >= good.Item1; j--)
+                {
+                    dp[j] = Math.Max(dp[j], dp[j - good.Item1] + good.Item2);
+                }
+            }
+
+            return dp[capacity];
+        }
+
+        // 分组背包
+        public int GroupKnapsack(int[][][] groups, int capacity)
+        {
+            int n = groups.Length;
+            int[] dp = new int[capacity + 1];
+            for (int i = 0; i < n; i++)
+            {
+                for (int j = capacity; j >= 0; j--)
+                {
+                    int m = groups[i].Length;
+                    for (int k = 0; k < m; k++)
+                    {
+                        if (j >= groups[i][k][0])
+                        {
+                            dp[j] = Math.Max(dp[j], dp[j - groups[i][k][0]] + groups[i][k][1]);
+                        }
+                    }
+                }
+            }
+
+            return dp[capacity];
+        }
+
         [Test]
         public void Test()
         {
             int[] weights = new int[] { 1, 2, 3, 4 };
             int[] values = new int[] { 2, 4, 4, 5 };
             int[] limits = new int[] { 3, 1, 3, 2 };
+            int[][][] groups = new int[][][]
+            {
+                new int[][]
+                {
+                    new int[] { 1, 2 },
+                    new int[] { 2, 4 }
+                },
+                new int[][]
+                {
+                    new int[] { 3, 4}
+                },
+                new int[][]
+                {
+                    new int[] { 4, 5 }
+                }
+            };
+
             Assert.AreEqual(Knapsack(weights, values, 5), 8);
             Assert.AreEqual(UnboundedKnapsack(weights, values, 5), 10);
             Assert.AreEqual(MultipleKnapsackI(weights, values, limits, 5), 10);
+            Assert.AreEqual(MultipleKnapsackII(weights, values, limits, 5), 10);
+            Assert.AreEqual(GroupKnapsack(groups, 5), 8);
         }
     }
 }
